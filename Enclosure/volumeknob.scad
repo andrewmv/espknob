@@ -24,7 +24,7 @@ module walls() {
 			}
 		}
 
-		difference() {
+		*difference() {
 			mod2();
 			offset(delta=-wall_thickness) {
 				mod2();
