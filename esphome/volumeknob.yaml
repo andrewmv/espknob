@@ -26,14 +26,14 @@ ota:
 
 sensor:
   - platform: rotary_encoder
-    name: "Volume Knob"
+    name: "Home Theater Volume Knob"
     id: volume_knob
-    pin_a: GPIO14 #A2
-    pin_b: GPIO9 #A3
+    pin_a: GPIO14  # A2
+    pin_b: GPIO18  # A1
 
 binary_sensor:
   - platform: gpio
-    name: "Volume Button"
+    name: "Home Theater Volume Button"
     id: volume_button
     pin: GPIO17 #A0
     filters:
