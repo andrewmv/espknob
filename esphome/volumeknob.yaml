@@ -4,13 +4,13 @@ esphome:
   board: esp32thing
 
 wifi:
-  ssid: "BleatBand"
-  password: "headbutt"
+  ssid: !secret ssid
+  password: !secret wappw
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "Volumeknob Fallback Hotspot"
-    password: "DL0rykhP9hoC"
+    password: !secret hotspotpw
 
 captive_portal:
 
@@ -19,10 +19,10 @@ logger:
 
 # Enable Home Assistant API
 api:
-  password: "granola-campsite-dilation"
+  password: !secret apipw
 
 ota:
-  password: "granola-campsite-dilation"
+  password: !secret apipw
 
 sensor:
   - platform: rotary_encoder
