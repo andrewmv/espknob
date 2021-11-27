@@ -1,0 +1,40 @@
+esphome:
+  name: volumeknob
+  platform: ESP32
+  board: esp32thing
+
+wifi:
+  ssid: "BleatBand"
+  password: "headbutt"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Volumeknob Fallback Hotspot"
+    password: "DL0rykhP9hoC"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "granola-campsite-dilation"
+
+ota:
+  password: "granola-campsite-dilation"
+
+sensor:
+  - platform: rotary_encoder
+    name: "Volume Knob"
+    id: volume_knob
+    pin_a: GPIO14 #A2
+    pin_b: GPIO9 #A3
+
+binary_sensor:
+  - platform: gpio
+    name: "Volume Button"
+    id: volume_button
+    pin: GPIO17 #A0
+    filters:
+      - delayed_off: 100ms
