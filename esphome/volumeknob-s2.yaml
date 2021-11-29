@@ -1,0 +1,45 @@
+esphome:
+  name: volumeknob
+  board: nodemcu-32s
+  platform: ESP32
+  platformio_options:
+    platform_packages:
+      - framework-arduinoespressif32 @ https://github.com/espressif/arduino-esp32.git#master
+      - platformio/tool-esptoolpy @ ~1.30100
+    board_build.mcu: esp32s2
+
+wifi:
+  ssid: !secret ssid
+  password: !secret wappw
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Volumeknob Fallback Hotspot"
+    password: !secret hotspotpw
+
+captive_portal:
+
+# Enable logging
+# logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret apipw
+
+ota:
+  password: !secret apipw
+
+sensor:
+  - platform: rotary_encoder
+    name: "Home Theater Volume Knob"
+    id: volume_knob
+    pin_a: GPIO14  # A2
+    pin_b: GPIO18  # A1
+
+binary_sensor:
+  - platform: gpio
+    name: "Home Theater Volume Button"
+    id: volume_button
+    pin: GPIO17 #A0
+    filters:
+      - delayed_off: 100ms

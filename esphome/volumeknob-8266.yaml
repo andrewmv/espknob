@@ -1,0 +1,84 @@
+esphome:
+  name: volumeknob
+
+esp8266:
+  board: nodemcuv2
+
+wifi:
+  ssid: !secret ssid
+  password: !secret wappw
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Volumeknob Fallback Hotspot"
+    password: !secret hotspotpw
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret apipw
+
+ota:
+  password: !secret apipw
+
+globals:
+  - id: target_volume
+    type: float
+    restore_value: false
+    initial_value: '0.00'
+
+sensor:
+  - platform: rotary_encoder
+    internal: true
+    id: volume_knob
+    pin_a: D2
+    pin_b: D1
+    on_clockwise:
+      - script.execute: delay_timer
+      - lambda: |-
+          if (id(target_volume) < 100.0) {
+            id(target_volume) += 1.00;
+          }
+    on_anticlockwise:
+      - script.execute: delay_timer
+      - lambda: |-
+          if (id(target_volume) > 0.0) {
+            id(target_volume) -= 1.00;
+          }
+
+script:
+  - id: delay_timer
+    mode: single
+    then: 
+      - delay: 250ms 
+      - lambda: |-
+          auto call = id(home_theater_volume_level).make_call();
+          call.set_value(id(target_volume));
+          call.perform();
+
+number:
+  - platform: template
+    icon: "mdi:volume-high"
+    id: home_theater_volume_level
+    name: "Home Theater Volume Level"
+    min_value: 0.00
+    max_value: 100.00
+    step: 1.00
+    optimistic: true
+    set_action: 
+      then:
+        - lambda: |-
+            id(target_volume) = x;
+
+binary_sensor:
+  - platform: gpio
+    name: "Home Theater Volume Button"
+    id: volume_button
+    pin: D0 #GPIO0/Flash
+    filters:
+      - delayed_off: 100ms
+      - invert:
