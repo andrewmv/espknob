@@ -25,11 +25,11 @@ api:
 ota:
   password: !secret apipw
 
-globals:
-  - id: target_volume
-    type: float
-    restore_value: false
-    initial_value: '0.00'
+# globals:
+#   - id: target_volume
+#     type: float
+#     restore_value: false
+#     initial_value: '0.00'
 
 sensor:
   - platform: rotary_encoder
@@ -37,18 +37,12 @@ sensor:
     id: volume_knob
     pin_a: D2
     pin_b: D1
+    min_value: 0
+    max_value: 100
     on_clockwise:
       - script.execute: delay_timer
-      - lambda: |-
-          if (id(target_volume) < 100.0) {
-            id(target_volume) += 1.00;
-          }
     on_anticlockwise:
       - script.execute: delay_timer
-      - lambda: |-
-          if (id(target_volume) > 0.0) {
-            id(target_volume) -= 1.00;
-          }
 
 script:
   - id: delay_timer
@@ -57,7 +51,7 @@ script:
       - delay: 250ms 
       - lambda: |-
           auto call = id(home_theater_volume_level).make_call();
-          call.set_value(id(target_volume));
+          call.set_value(id(volume_knob).state);
           call.perform();
 
 number:
@@ -71,8 +65,9 @@ number:
     optimistic: true
     set_action: 
       then:
-        - lambda: |-
-            id(target_volume) = x;
+        - sensor.rotary_encoder.set_value:
+            id: volume_knob
+            value: !lambda 'return x;'
 
 binary_sensor:
   - platform: gpio

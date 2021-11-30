@@ -3,7 +3,7 @@ include <volumeknob.h>
 //*** ASSEMBLY ***//
 
 translate([enc_x / 2, enc_y / 2, -10])
-	dial_asm()	;
+	*dial_asm()	;
 
 module dial_asm() {
 	difference() {
