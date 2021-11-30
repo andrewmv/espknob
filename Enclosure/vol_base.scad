@@ -50,6 +50,8 @@ module base_placeholders() {
 	if (render_placeholders) {
 		translate(esp_pos) {
 			color("green")	cube(esp_dim);
+			translate([esp_cuts[0][0],0,-2])
+				color("silver")	cube([esp_cuts[0][1],5,2]);
 		}
 		translate(batt_pos) {
 			color("pink")	cube(batt_dim);

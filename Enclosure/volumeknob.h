@@ -39,7 +39,7 @@ mounting_stem_r = 6.5/2;
 mounting_hole_r = 2.8/2;
 
 // ESP8266Thing
-esp_pos = [-5,-8,wall_thickness + mounting_stem_depth];
+esp_pos = [-1,-5.5,wall_thickness + mounting_stem_depth];
 esp_dim = [26.5,55.6,2];
 esp_mounting_holes = [
 	[2.5, 12.0],
@@ -48,11 +48,12 @@ esp_mounting_holes = [
 	[22.5, 43.8]
 ];
 esp_cuts = [
-	[14.0,9.0]
+	[3.0,9.0]
 ];
+esp_cut_tol = 3;
 
 // Battery
-batt_pos = [30,5,wall_thickness];
+batt_pos = [29,5,wall_thickness];
 batt_dim = [34.0,51.0,5.7];
 
 // Rotary encoder module

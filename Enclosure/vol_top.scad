@@ -18,20 +18,21 @@ module mod2() {
 
 //walls
 module walls() {
-	linear_extrude(enc_z) {
-		difference() {
-			mod1();
-			offset(delta=-wall_thickness) {
+	difference() {
+		linear_extrude(enc_z) {
+			difference() {
 				mod1();
+				offset(delta=-wall_thickness) {
+					mod1();
+				}
 			}
 		}
-
-		*difference() {
-			mod2();
-			offset(delta=-wall_thickness) {
-				mod2();
-			}
-		}
+		xoff = enc_x - esp_pos.x - esp_cuts[0][0] - esp_cuts[0][1] - esp_cut_tol;
+		zoff = enc_z - esp_pos.z + esp_dim.z + 1 - esp_cut_tol;
+		translate([xoff, -10, zoff])
+			cube([	esp_cuts[0][1] + (esp_cut_tol * 2),
+					10,
+					2 + (esp_cut_tol * 2)]);
 	}
 }
 
