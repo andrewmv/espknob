@@ -1,5 +1,7 @@
 include <volumeknob.h>
 
+top_vers_lbl = ["v1.1", "2021-11"];
+
 //rounded square
 module mod1() {
 	minkowski() {
@@ -43,28 +45,66 @@ module base() {
 	}
 }
 
-//pot bracket
 module pot_bracket() {
-	bracket_length = knob_diam + 10;
-	bracket_width = 20;
-	bracket_height = 10; //placeholder
-	bracket_thickenss = 2;
-	//pot holder
-	translate([enc_x / 2, enc_y / 2, bracket_height])
-	linear_extrude(bracket_thickenss) {
-		difference() {
-			square(size=[bracket_length, bracket_width], center=true);
-			circle(r=5);	//placeholder value
+	a = bracket_height + bracket_thickenss;
+	b = 10;
+	c = rot_dim.z;
+	d = bracket_length - (2 * b);
+	ex = bracket_width;
+	xoff = (enc_x / 2) - (bracket_length / 2) - (bracket_thickenss / 2);
+	yoff = (enc_y / 2) - (bracket_width / 2);
+	bushing_r = 6.75/2;
+	difference() {
+		translate([xoff, yoff, a]) {
+			rotate([-90,0,0]) {
+				linear_extrude(ex) {
+					square([bracket_thickenss, a]);
+					square([b,bracket_thickenss]);
+					translate([b,0,0])
+						square([bracket_thickenss,c]);
+					translate([b,c,0])
+						square([d + bracket_thickenss,bracket_thickenss]);
+					translate([b+d,0,0]) {
+						square([bracket_thickenss,c]);
+						square([b,bracket_thickenss]);
+					}
+					translate([2*b+d,0,0])
+						square([bracket_thickenss,a]);
+				}
+			}
+		}
+		translate([enc_x / 2, enc_y / 2,-a]) {
+			cylinder(r=bushing_r, h=enc_z);
+			translate([bushing_r + 3,0,0])
+				cube(size=[1,2,enc_z], center=true);
 		}
 	}
-	//side supports
-	translate([0,(enc_y / 2) - (bracket_width / 2),0]) {
-		cube(size=[bracket_thickenss, bracket_width, bracket_height]);
-	}
-	translate([bracket_length - bracket_thickenss,(enc_y / 2) - (bracket_width / 2),0]) {
-		cube(size=[bracket_thickenss, bracket_width, bracket_height]);
-	}
 }
+
+//pot bracket
+// module pot_bracket() {
+// 	//pot holder
+// 	translate([enc_x / 2, enc_y / 2, bracket_height]) {
+// 		difference() {
+// 			linear_extrude(bracket_thickenss) {
+// 				difference() {
+// 					square(size=[bracket_length, bracket_width], center=true);
+// 					circle(r=(6.75/2));	
+// 				}
+// 			}
+// 			//pot alignment notch
+// 			translate([6.75 + 3, 0, 3])
+// 				cube(size=[1,2,10], center=true);
+// 		}
+// 	}
+// 	//side supports
+// 	translate([(enc_x / 2) - bracket_length / 2,(enc_y / 2) - (bracket_width / 2),0]) {
+// 		cube(size=[bracket_thickenss, bracket_width, bracket_height]);
+// 	}
+// 	translate([(enc_x / 2) + (bracket_length / 2) - bracket_thickenss,(enc_y / 2) - (bracket_width / 2),0]) {
+// 		cube(size=[bracket_thickenss, bracket_width, bracket_height]);
+// 	}
+// }
 
 //assembly
 module asm_top() {
@@ -75,4 +115,16 @@ module asm_top() {
 		}
 	}
 	base();
+	color("grey") top_label();
+}
+
+module top_label() {
+	translate([-3,5,wall_thickness]) {
+		linear_extrude(1) {
+			for(i = [0:len(top_vers_lbl)-1]) {
+				translate([0, -i * 6, 0]) 
+					text(top_vers_lbl[i], size=5);
+			}
+		}
+	}
 }

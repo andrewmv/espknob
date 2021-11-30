@@ -2,7 +2,7 @@ include <volumeknob.h>
 include <vol_top.scad>
 include </home/growlph/3D Printer Models/OpenSCAD Projects/retclip.scad>
 
-base_vers_lbl = ["1.0", "2021-11", "ST8266T"];
+base_vers_lbl = ["1.1", "2021-11", "ST8266T"];
 
 module asm_base() {
 	translate([0,0,enc_z]) {
@@ -36,7 +36,9 @@ module base_mounts() {
 		translate([(batt_dim.x / 2) - (ex/2),batt_dim.y + 2,0])
 			rotate([0,-90,180]) cage_join_clip(a,b,c,d,e,f,ex);
 		// Left (from front)
-		translate([-2,(batt_dim.y / 2) - (ex / 2),0])
+		translate([-2,5,0])
+			rotate([0,-90,-90]) cage_join_clip(a,b,c,d,e,f,ex);
+		translate([-2,batt_dim.y - 8,0])
 			rotate([0,-90,-90]) cage_join_clip(a,b,c,d,e,f,ex);
 		// Right (from front)
 		translate([batt_dim.x + 2,(batt_dim.y / 2) + (ex / 2),0])
@@ -53,7 +55,7 @@ module base_placeholders() {
 			color("pink")	cube(batt_dim);
 		}
 		translate(rot_pos) {
-			color("blue")	cube(rot_pos);
+			color("blue")	cube(rot_dim);
 		}
 	}
 }
