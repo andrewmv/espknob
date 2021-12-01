@@ -1,6 +1,6 @@
 // Settings
 
-render_placeholders = true;
+render_placeholders = false;
 $fn = 50;
 
 // Major dimensions
@@ -50,10 +50,11 @@ esp_mounting_holes = [
 esp_cuts = [
 	[3.0,9.0]
 ];
-esp_cut_tol = 3;
+esp_debug_cut = [22.8,17];
+esp_cut_tol = 1.5;
 
 // Battery
-batt_pos = [29,5,wall_thickness];
+batt_pos = [28.5,5,wall_thickness];
 batt_dim = [34.0,51.0,5.7];
 
 // Rotary encoder module

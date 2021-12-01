@@ -19,6 +19,7 @@ module mod2() {
 //walls
 module walls() {
 	difference() {
+		//walls
 		linear_extrude(enc_z) {
 			difference() {
 				mod1();
@@ -27,11 +28,19 @@ module walls() {
 				}
 			}
 		}
+		//USB cut
 		xoff = enc_x - esp_pos.x - esp_cuts[0][0] - esp_cuts[0][1] - esp_cut_tol;
 		zoff = enc_z - esp_pos.z + esp_dim.z + 1 - esp_cut_tol;
 		translate([xoff, -10, zoff])
 			cube([	esp_cuts[0][1] + (esp_cut_tol * 2),
 					10,
+					2 + (esp_cut_tol * 2)]);
+		//ICSP cut
+		yoff = esp_pos.y + esp_debug_cut[0] - esp_cut_tol;
+		color("cyan")
+		translate([enc_x + 5,yoff, zoff])
+			cube([	10,
+					esp_debug_cut[1] + (2 *esp_cut_tol),
 					2 + (esp_cut_tol * 2)]);
 	}
 }
