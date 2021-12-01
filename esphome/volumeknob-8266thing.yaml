@@ -1,17 +1,18 @@
 # 2021-11 Andrew Villeneuve
 # Platform: ESP8266
-# Board: NodeMCU ESP8266 
+# Board: SparkFun ESP8266 Thing
 #
 # Pin Config:
-# D0: Button (Rot Enc Switch), !LED
-# D1: Rotary Encoder Clock
-# D2: Rotary Encoder Data
+# 12: Button (Rot Enc Switch)
+# 13: Rotary Encoder Clock
+# 4: Rotary Encoder Data
+# 5: Status LED (on-board)
 
 esphome:
   name: volumeknob
 
 esp8266:
-  board: nodemcuv2
+  board: thing
 
 wifi:
   ssid: !secret ssid
@@ -34,18 +35,18 @@ api:
 ota:
   password: !secret apipw
 
-# globals:
-#   - id: target_volume
-#     type: float
-#     restore_value: false
-#     initial_value: '0.00'
+status_led:
+  pin: 5
 
 sensor:
+  - platform: wifi_signal
+    name: "Home Theater Volume Wifi"
+    update_interval: 60s
   - platform: rotary_encoder
     internal: true
     id: volume_knob
-    pin_a: D2
-    pin_b: D1
+    pin_a: 12
+    pin_b: 13
     min_value: 0
     max_value: 100
     on_clockwise:
@@ -82,7 +83,7 @@ binary_sensor:
   - platform: gpio
     name: "Home Theater Volume Button"
     id: volume_button
-    pin: D0 #GPIO0/Flash
+    pin: 4 
     filters:
       - delayed_off: 100ms
       - invert:
