@@ -47,8 +47,8 @@ sensor:
     id: volume_knob
     pin_a: 12
     pin_b: 13
-    min_value: 0
-    max_value: 100
+    min_value: -20
+    max_value: 20
     on_clockwise:
       - script.execute: delay_timer
     on_anticlockwise:
@@ -60,17 +60,18 @@ script:
     then: 
       - delay: 250ms 
       - lambda: |-
-          auto call = id(home_theater_volume_level).make_call();
+          auto call = id(home_theater_volume_delta).make_call();
           call.set_value(id(volume_knob).state);
           call.perform();
 
 number:
   - platform: template
     icon: "mdi:volume-high"
-    id: home_theater_volume_level
-    name: "Home Theater Volume Level"
-    min_value: 0.00
-    max_value: 100.00
+    id: home_theater_volume_delta
+    name: "Home Theater Volume Delta"
+    min_value: -20.00
+    max_value: 20.00
+    initial_value: 0.00
     step: 1.00
     optimistic: true
     set_action: 
