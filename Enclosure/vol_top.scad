@@ -1,6 +1,6 @@
 include <volumeknob.h>
 
-top_vers_lbl = ["v1.1", "2021-11"];
+top_vers_lbl = ["v1.2", "2021-12"];
 
 //rounded square
 module mod1() {
@@ -91,31 +91,6 @@ module pot_bracket() {
 	}
 }
 
-//pot bracket
-// module pot_bracket() {
-// 	//pot holder
-// 	translate([enc_x / 2, enc_y / 2, bracket_height]) {
-// 		difference() {
-// 			linear_extrude(bracket_thickenss) {
-// 				difference() {
-// 					square(size=[bracket_length, bracket_width], center=true);
-// 					circle(r=(6.75/2));	
-// 				}
-// 			}
-// 			//pot alignment notch
-// 			translate([6.75 + 3, 0, 3])
-// 				cube(size=[1,2,10], center=true);
-// 		}
-// 	}
-// 	//side supports
-// 	translate([(enc_x / 2) - bracket_length / 2,(enc_y / 2) - (bracket_width / 2),0]) {
-// 		cube(size=[bracket_thickenss, bracket_width, bracket_height]);
-// 	}
-// 	translate([(enc_x / 2) + (bracket_length / 2) - bracket_thickenss,(enc_y / 2) - (bracket_width / 2),0]) {
-// 		cube(size=[bracket_thickenss, bracket_width, bracket_height]);
-// 	}
-// }
-
 //assembly
 module asm_top() {
 	difference() {
@@ -129,11 +104,15 @@ module asm_top() {
 }
 
 module top_label() {
-	translate([-3,5,wall_thickness]) {
-		linear_extrude(1) {
-			for(i = [0:len(top_vers_lbl)-1]) {
-				translate([0, -i * 6, 0]) 
-					text(top_vers_lbl[i], size=5);
+	translate([35,-corner_r + wall_thickness + 1,10]) {
+		rotate([90,0,0]) {
+			mirror([1,0,0]) {
+				linear_extrude(1) {
+					for(i = [0:len(top_vers_lbl)-1]) {
+						translate([0, -i * 6, 0]) 
+							text(top_vers_lbl[i], size=5);
+					}
+				}
 			}
 		}
 	}
