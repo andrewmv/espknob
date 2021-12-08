@@ -1,0 +1,28 @@
+alias: Home Theater Volume Knob Update
+description: ''
+trigger:
+  - platform: state
+    entity_id: number.home_theater_volume_delta
+condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.state | float != 0.0 }}'
+action:
+  - service: number.set_value
+    data:
+      value: '0'
+    target:
+      entity_id: number.home_theater_volume_delta
+  - service: media_player.volume_set
+    data:
+      entity_id: media_player.receiver
+      volume_level: >
+        {% set target = state_attr('media_player.receiver', 'volume_level') +
+        (trigger.to_state.state | float / 100) %} {% if target | float <= 0.0 %}
+          {{ 0.0 | float }}
+        {% elif target | float >= 1.0 %}
+          {{ 1.0 | float }}
+        {% else %}
+          {{ target | float }}
+        {% endif %}
+mode: queued
+max: 10
