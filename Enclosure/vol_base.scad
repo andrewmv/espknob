@@ -2,7 +2,7 @@ include <volumeknob.h>
 include <vol_top.scad>
 include </home/growlph/3D Printer Models/OpenSCAD Projects/retclip.scad>
 
-base_vers_lbl = ["1.1", "2021-11", "SF8266T"];
+base_vers_lbl = ["1.2", "2021-12", "SF8266T"];
 
 module asm_base() {
 	translate([0,0,enc_z]) {
@@ -77,14 +77,16 @@ module mounting_stem(depth = mounting_stem_depth, stem_r = mounting_stem_r, hole
 }
 
 module alignment_lip() {
-	translate([0,-corner_r + wall_thickness,0])
-		cube([enc_x,2,wall_thickness + 3]);
-	translate([0,enc_y + corner_r - wall_thickness - 2,0])
-		cube([enc_x,2,wall_thickness + 3]);
-	translate([-corner_r + wall_thickness, 0, 0])
-		cube([2,enc_y,wall_thickness + 3]);
-	translate([enc_y + corner_r - wall_thickness - 2, 0, 0])
-		cube([2,enc_y,wall_thickness + 3]);
+	d = 20; // Alignment lip distance from edge
+	t = 0.25; // Nudge lips toward center
+	translate([d,-corner_r + wall_thickness + t,0])
+		cube([enc_x - 2*d,2,wall_thickness + 3]);
+	translate([d,enc_y + corner_r - wall_thickness - 2 - t,0])
+		cube([enc_x - 2*d,2,wall_thickness + 3]);
+	translate([-corner_r + wall_thickness + t, d + 18, 0])
+		cube([2,enc_y - 2*d - 5,wall_thickness + 3]);
+	translate([enc_y + corner_r - wall_thickness - 2 -t, d, 0])
+		cube([2,enc_y - 2*d,wall_thickness + 3]);
 }
 
 module base_label() {

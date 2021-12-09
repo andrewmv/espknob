@@ -63,7 +63,7 @@ module pot_bracket() {
 	ex = bracket_width;
 	xoff = (enc_x / 2) - (bracket_length / 2) - (bracket_thickenss / 2);
 	yoff = (enc_y / 2) - (bracket_width / 2);
-	bushing_r = 6.75/2;
+	bushing_r = 7.25/2;
 	difference() {
 		translate([xoff, yoff, a]) {
 			rotate([-90,0,0]) {
