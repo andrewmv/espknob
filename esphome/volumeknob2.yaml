@@ -1,0 +1,90 @@
+# 2021-11 Andrew Villeneuve
+# Platform: ESP8266
+# Board: SparkFun ESP8266 Thing
+#
+# Pin Config:
+# 12: Button (Rot Enc Switch)
+# 13: Rotary Encoder Clock
+# 4: Rotary Encoder Data
+# 5: Status LED (on-board)
+
+esphome:
+  name: volumeknob2
+
+esp8266:
+  board: thing
+
+wifi:
+  ssid: !secret ssid
+  password: !secret wappw
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Volumeknob2 Fallback Hotspot"
+    password: !secret hotspotpw
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret apipw
+
+ota:
+  password: !secret apipw
+
+status_led:
+  pin: 5
+
+sensor:
+  - platform: wifi_signal
+    name: "Home Theater Volume Wifi 2"
+    update_interval: 60s
+  - platform: rotary_encoder
+    internal: true
+    id: volume_knob_2
+    pin_a: 12
+    pin_b: 13
+    min_value: -20
+    max_value: 20
+    on_clockwise:
+      - script.execute: delay_timer
+    on_anticlockwise:
+      - script.execute: delay_timer
+
+script:
+  - id: delay_timer
+    mode: single
+    then: 
+      - delay: 250ms 
+      - lambda: |-
+          auto call = id(home_theater_volume_delta).make_call();
+          call.set_value(id(volume_knob).state);
+          call.perform();
+
+number:
+  - platform: template
+    icon: "mdi:volume-high"
+    id: home_theater_volume_delta_2
+    name: "Home Theater Volume Delta 2"
+    min_value: -20.00
+    max_value: 20.00
+    initial_value: 0.00
+    step: 1.00
+    optimistic: true
+    set_action: 
+      then:
+        - sensor.rotary_encoder.set_value:
+            id: volume_knob_2
+            value: !lambda 'return x;'
+
+binary_sensor:
+  - platform: gpio
+    name: "Home Theater Volume Button 2"
+    id: volume_button_2
+    pin: 4 
+    filters:
+      - delayed_off: 100ms
+      - invert:

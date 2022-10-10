@@ -62,3 +62,9 @@ rot_pos = [	(enc_x / 2) - (19.5/2),
 			(enc_y / 2) - (26.2/2),
 			wall_thickness + enc_z - bracket_height - bracket_thickenss
 		  ];
+
+// Case assembly mounts
+case_stem_pos = [
+	[0,0],
+	[enc_x,enc_y]
+];
